@@ -3,6 +3,7 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import * as ImageService from 'Service/image-service';
 import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
 
 export class App extends Component {
   state = {
@@ -11,6 +12,7 @@ export class App extends Component {
     images: [],
     total: 0,
     error: null,
+    isLoading: false,
   };
 
   onFormSubmit = value => {
@@ -32,6 +34,7 @@ export class App extends Component {
 
   getApi = async (query, page) => {
     if (this.state.query === '') return;
+    this.setState({ isLoading: true });
     try {
       const { hits, totalHits } = await ImageService.getImages(query, page);
       this.setState(prevState => ({
@@ -40,6 +43,8 @@ export class App extends Component {
       }));
     } catch (error) {
       this.setState({ error: error.message });
+    } finally {
+      this.setState({ isLoading: false });
     }
   };
 
@@ -49,10 +54,11 @@ export class App extends Component {
   };
 
   render() {
-    const { images, total } = this.state;
+    const { images, total, isLoading } = this.state;
     return (
       <div className="App">
         <Searchbar onSubmit={this.onFormSubmit} />
+        {isLoading && <Loader />}
         {images.length > 0 && <ImageGallery images={images} />}
         {images.length > 0 && total > images.length && (
           <Button onClick={this.onClickLoadMore} />
