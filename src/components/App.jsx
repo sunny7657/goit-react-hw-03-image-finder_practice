@@ -8,6 +8,8 @@ export class App extends Component {
     query: '',
     page: 1,
     images: [],
+    total: 0,
+    error: '',
   };
 
   onFormSubmit = value => {
@@ -23,16 +25,22 @@ export class App extends Component {
 
   getApi = async (query, page) => {
     try {
-      const data = await ImageService.getImages(query, page);
-      console.log(data);
-    } catch (error) {}
+      const { hits, totalHits } = await ImageService.getImages(query, page);
+      this.setState(prevState => ({
+        images: [...prevState.images, ...hits],
+        total: totalHits,
+      }));
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
   };
 
   render() {
+    const { images } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.onFormSubmit} />
-        <ImageGallery />
+        {images.length > 0 && <ImageGallery images={images} />}
       </>
     );
   }

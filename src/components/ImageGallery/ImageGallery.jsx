@@ -1,3 +1,11 @@
-export const ImageGallery = () => {
-  return <ul className="ImageGallery"></ul>;
+import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+
+export const ImageGallery = ({ images }) => {
+  return (
+    <ul className="ImageGallery">
+      {images.map(image => (
+        <ImageGalleryItem image={image} key={image.id} />
+      ))}
+    </ul>
+  );
 };
