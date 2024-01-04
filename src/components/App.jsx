@@ -10,11 +10,17 @@ export class App extends Component {
     page: 1,
     images: [],
     total: 0,
-    error: '',
+    error: null,
   };
 
   onFormSubmit = value => {
-    this.setState({ query: value });
+    this.setState({
+      query: value,
+      page: 1,
+      images: [],
+      total: 0,
+      error: null,
+    });
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -25,6 +31,7 @@ export class App extends Component {
   }
 
   getApi = async (query, page) => {
+    if (this.state.query === '') return;
     try {
       const { hits, totalHits } = await ImageService.getImages(query, page);
       this.setState(prevState => ({
@@ -37,18 +44,20 @@ export class App extends Component {
   };
 
   onClickLoadMore = e => {
-    e.preventDefault();
+    // e.preventDefault();
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
   render() {
-    const { images } = this.state;
+    const { images, total } = this.state;
     return (
-      <>
+      <div className="App">
         <Searchbar onSubmit={this.onFormSubmit} />
         {images.length > 0 && <ImageGallery images={images} />}
-        <Button onClick={this.onClickLoadMore} />
-      </>
+        {images.length > 0 && total > images.length && (
+          <Button onClick={this.onClickLoadMore} />
+        )}
+      </div>
     );
   }
 }

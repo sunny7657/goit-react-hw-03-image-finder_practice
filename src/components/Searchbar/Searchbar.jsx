@@ -20,7 +20,7 @@ export class Searchbar extends Component {
       <header className="Searchbar">
         <form className="SearchForm" onSubmit={this.handleSubmit}>
           <button type="submit" className="SearchForm-button">
-            <span className="button-label">Search</span>
+            <span className="button-label">🔎</span>
           </button>
 
           <input
