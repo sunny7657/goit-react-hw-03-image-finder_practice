@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import * as ImageService from 'Service/image-service';
+import { Button } from './Button/Button';
 
 export class App extends Component {
   state = {
@@ -35,12 +36,18 @@ export class App extends Component {
     }
   };
 
+  onClickLoadMore = e => {
+    e.preventDefault();
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
+
   render() {
     const { images } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.onFormSubmit} />
         {images.length > 0 && <ImageGallery images={images} />}
+        <Button onClick={this.onClickLoadMore} />
       </>
     );
   }
