@@ -5,8 +5,8 @@ export class Searchbar extends Component {
     value: '',
   };
 
-  handleChange = ({ target: { value } }) => {
-    this.setState({ value: value });
+  handleChange = evt => {
+    this.setState({ value: evt.currentTarget.value.toLowerCase().trim() });
   };
 
   handleSubmit = e => {
